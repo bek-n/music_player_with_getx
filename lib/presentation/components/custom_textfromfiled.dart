@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 
-import '../../controller/auth_controller.dart';
-import '../style/style.dart';
+import '../styles/style.dart';
+
+
+
 
 class CustomTextFrom extends StatelessWidget {
   final String hintext;
@@ -52,23 +53,12 @@ class CustomTextFrom extends StatelessWidget {
         validator: validator,
         focusNode: node,
         keyboardType: keyboardType,
-        obscureText:
-            isObscure ? (context.watch<AuthController>().isVisibility) : false,
+        
         controller: controller,
         decoration: InputDecoration(
           fillColor: fillColor,
           filled: filled,
-          suffixIcon: suffixicon ??
-              (isObscure
-                  ? IconButton(
-                      onPressed: () {
-                        context.read<AuthController>().onChange();
-                      },
-                      icon: context.watch<AuthController>().isVisibility
-                          ? const Icon(Icons.visibility)
-                          : const Icon(Icons.visibility_off),
-                    )
-                  : const SizedBox.shrink()),
+          suffixIcon: suffixicon ,
           prefix: perfixicon,
           // suffix: suffixicon,
           label: Text('$label'),
