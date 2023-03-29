@@ -21,6 +21,8 @@ class AudioPlayerPage extends StatefulWidget {
 class _AudioPlayerPageState extends State<AudioPlayerPage> {
   final controller = Get.put(PlayerController());
   final controllerSearch = Get.put(SearchController());
+  double initValue = 1.0;
+  List<double> value = [1.0, 2.0, 3.0];
 
   @override
   void initState() {
@@ -214,11 +216,11 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                                 padding: const EdgeInsets.only(top: 30),
                                 child: Row(
                                   children: [
-                                    const Icon(
-                                      Icons.volume_mute,
-                                      size: 28,
-                                      color: Style.whiteColor,
-                                    ),
+                                    // const Icon(
+                                    //   Icons.volume_mute,
+                                    //   size: 28,
+                                    //   color: Style.whiteColor,
+                                    // ),
                                     // Slider(
                                     //   min: 0,
                                     //   max: 1,
@@ -236,34 +238,28 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                                     Padding(
                                       padding: const EdgeInsets.only(left: 20),
                                       child: DropdownButton(
-                                        items: const [
-                                          DropdownMenuItem(
-                                            value: 1.0,
+                                        value: controller.player.speed,
+                                        // Step 4.
+                                        items: <double>[1.0, 2.0, 3.0]
+                                            .map<DropdownMenuItem<double>>(
+                                                (double value) {
+                                          return DropdownMenuItem<double>(
+                                            value: value,
                                             child: Text(
-                                              "1x",
-                                              style: TextStyle(
-                                                  color: Colors.black),
+                                              value.toString(),
+                                              style: Style.textStyleRegular2(
+                                                  textColor:
+                                                      Style.primaryColor),
                                             ),
-                                          ),
-                                          DropdownMenuItem(
-                                            value: 2.0,
-                                            child: Text("2x",
-                                                style: TextStyle(
-                                                    color: Colors.black)),
-                                          ),
-                                          DropdownMenuItem(
-                                            value: 3.0,
-                                            child: Text("3x",
-                                                style: TextStyle(
-                                                    color: Colors.black)),
-                                          )
-                                        ],
+                                          );
+                                        }).toList(),
                                         onChanged: (s) {
                                           if (s != null) {
+                                            initValue = s;
                                             controller.setSpeed(s);
+                                            controller.update();
                                           }
                                         },
-                                        value: controller.player.speed,
                                       ),
                                     ),
                                   ],
