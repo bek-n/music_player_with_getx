@@ -8,11 +8,10 @@ class Style {
 
   // ---------- Color   ---------- //
 
-  static const textColor = Color(0xff022B4A);
-  static const primaryColor = Color(0xff033C67);
+  static const primaryColor = Color(0xff06C149);
   static const whiteColor = Colors.white;
   static const blackColor = Colors.black;
-  static const darkBgcolorOfApp = Color(0xff171725);
+  static const darkBgcolorOfApp = Color(0xff181A20);
   static const lightBgcolorOfApp = Color(0xffFAFAFD);
   static const greyColor65 = Color(0xffF2F2F3);
   static const greyColor90 = Color(0xff95969D);
@@ -33,6 +32,22 @@ class Style {
       colors: [
         Color(0xffFAFD8F),
         Color(0xff01BBFFD),
+      ]);
+
+  static const linearUserInfo = LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [
+        Color(0xff6782B4),
+        Color(0xffB1BFD8),
+      ]);
+
+  static const linearUser = LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [
+        Color.fromARGB(255, 50, 63, 88),
+        Color.fromARGB(255, 37, 97, 199),
       ]);
 
   static const primaryDisabledColor = Color.fromARGB(255, 132, 250, 193);
