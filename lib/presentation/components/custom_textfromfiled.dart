@@ -3,9 +3,6 @@ import 'package:flutter/services.dart';
 
 import '../styles/style.dart';
 
-
-
-
 class CustomTextFrom extends StatelessWidget {
   final String hintext;
   final Widget? suffixicon;
@@ -53,12 +50,11 @@ class CustomTextFrom extends StatelessWidget {
         validator: validator,
         focusNode: node,
         keyboardType: keyboardType,
-        
         controller: controller,
         decoration: InputDecoration(
           fillColor: fillColor,
           filled: filled,
-          suffixIcon: suffixicon ,
+          suffixIcon: suffixicon,
           prefix: perfixicon,
           // suffix: suffixicon,
           label: Text('$label'),

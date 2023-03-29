@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:music_player_with_getx/presentation/components/custom_textfromfiled.dart';
 import 'package:music_player_with_getx/presentation/components/zoom_tab_animation.dart';
 import 'package:music_player_with_getx/presentation/pages/player_page.dart';
 import 'package:music_player_with_getx/presentation/styles/style.dart';
 import '../../application/search_controller.dart';
+import '../components/timer_search.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -15,6 +17,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController textController = TextEditingController();
   final controller = Get.put(SearchController());
+  final _delayed = Delayed(milliseconds: 700);
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +34,14 @@ class _SearchPageState extends State<SearchPage> {
         padding: const EdgeInsets.all(32.0),
         child: Column(
           children: [
-            TextFormField(
-              style: const TextStyle(color: Colors.black),
-              controller: textController,
-              decoration: const InputDecoration(labelText: "Search"),
+            CustomTextFrom(
+              hintext: '',
+              isObscure: false,
+              onChange: (value) {
+                _delayed.run(() async {
+                  controller.getMusic(textController.text);
+                });
+              },
             ),
             GetBuilder<SearchController>(builder: (context) {
               return Expanded(
@@ -79,11 +86,11 @@ class _SearchPageState extends State<SearchPage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          controller.getMusic(textController.text);
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     controller.getMusic(textController.text);
+      //   },
+      // ),
     );
   }
 }
