@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:music_player_with_getx/presentation/components/zoom_tab_animation.dart';
 import 'package:music_player_with_getx/presentation/pages/player_page.dart';
+import 'package:music_player_with_getx/presentation/styles/style.dart';
 import '../../application/search_controller.dart';
-
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -18,7 +19,14 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: Style.darkBgcolorOfApp,
+      appBar: AppBar(
+        title: Text(
+          'Search and Listen',
+          style: Style.textStyleRegular(textColor: Style.whiteColor, size: 25),
+        ),
+        backgroundColor: Style.darkBgcolorOfApp,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(32.0),
         child: Column(
@@ -26,7 +34,7 @@ class _SearchPageState extends State<SearchPage> {
             TextFormField(
               style: const TextStyle(color: Colors.black),
               controller: textController,
-              decoration: InputDecoration(labelText: "Search"),
+              decoration: const InputDecoration(labelText: "Search"),
             ),
             GetBuilder<SearchController>(builder: (context) {
               return Expanded(
@@ -41,25 +49,27 @@ class _SearchPageState extends State<SearchPage> {
                                 selectIndex: index,
                               ));
                         },
-                        child: Container(
-                          padding: EdgeInsets.all(4),
-                          margin: EdgeInsets.all(8),
-                          child: Row(
-                            children: [
-                              Image.network(
-                                controller.musicModel.data?[index].album
-                                        ?.coverMedium ??
-                                    "",
-                                width: 64,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  controller.musicModel.data?[index].title ??
+                        child: ZoomTabAnimation(
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            margin: const EdgeInsets.all(8),
+                            child: Row(
+                              children: [
+                                Image.network(
+                                  controller.musicModel.data?[index].album
+                                          ?.coverMedium ??
                                       "",
-                                  style: TextStyle(color: Colors.black),
+                                  width: 64,
                                 ),
-                              ),
-                            ],
+                                Expanded(
+                                  child: Text(
+                                    controller.musicModel.data?[index].title ??
+                                        "",
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );

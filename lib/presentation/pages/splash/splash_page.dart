@@ -17,7 +17,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 3), () {
-       Get.to(() => const SearchPage());
+      Get.off(() => const SearchPage());
+     
     });
     super.initState();
   }
@@ -25,6 +26,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
+      backgroundColor: Style.darkBgcolorOfApp,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -34,13 +37,14 @@ class _SplashScreenState extends State<SplashScreen> {
             children: [
               Image.asset(
                 'assets/images/logo.png',
-                height: 60,
-                width: 60,
+                height: 80,
+                width: 80,
               ),
               16.horizontalSpace,
               Text(
                 'Hearme',
-                style: Style.textStyleRegular(textColor: Style.primaryColor),
+                style: Style.textStyleRegular(
+                    textColor: Style.whiteColor, size: 50),
               )
             ],
           ),
