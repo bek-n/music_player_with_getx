@@ -35,11 +35,18 @@ class _SearchPageState extends State<SearchPage> {
         child: Column(
           children: [
             CustomTextFrom(
+              style: Style.textStyleRegular(textColor: Style.whiteColor),
               hintext: '',
+              label: "",
+              suffixicon: Icon(
+                Icons.search,
+                color: Style.whiteColor,
+              ),
               isObscure: false,
               onChange: (value) {
                 _delayed.run(() async {
                   controller.getMusic(textController.text);
+                  setState(() {});
                 });
               },
             ),
