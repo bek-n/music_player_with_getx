@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:music_player_with_getx/presentation/pages/home_page.dart';
+import 'package:music_player_with_getx/presentation/pages/search_page.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true
       ),
-      home: const HomePage(),
+      home: const SearchPage(),
     );
   }
 }
