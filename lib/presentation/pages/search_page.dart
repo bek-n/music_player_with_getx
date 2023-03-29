@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:music_player_with_getx/presentation/components/custom_textfromfiled.dart';
 import 'package:music_player_with_getx/presentation/components/zoom_tab_animation.dart';
 import 'package:music_player_with_getx/presentation/pages/player_page.dart';
@@ -18,10 +21,12 @@ class _SearchPageState extends State<SearchPage> {
   final TextEditingController textController = TextEditingController();
   final controller = Get.put(SearchController());
   final _delayed = Delayed(milliseconds: 700);
+  String val = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Style.darkBgcolorOfApp,
       appBar: AppBar(
         title: Text(
@@ -38,58 +43,90 @@ class _SearchPageState extends State<SearchPage> {
               style: Style.textStyleRegular(textColor: Style.whiteColor),
               hintext: '',
               label: "",
-              suffixicon: Icon(
+              suffixicon: const Icon(
                 Icons.search,
                 color: Style.whiteColor,
               ),
               isObscure: false,
               onChange: (value) {
                 _delayed.run(() async {
-                  controller.getMusic(textController.text);
+                  val = value;
+                  controller.getMusic(value);
                   setState(() {});
                 });
               },
             ),
-            GetBuilder<SearchController>(builder: (context) {
-              return Expanded(
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    itemCount: controller.musicModel.data?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          Get.to(() => AudioPlayerPage(
-                                selectIndex: index,
-                              ));
-                        },
-                        child: ZoomTabAnimation(
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            margin: const EdgeInsets.all(8),
-                            child: Row(
-                              children: [
-                                Image.network(
-                                  controller.musicModel.data?[index].album
-                                          ?.coverMedium ??
-                                      "",
-                                  width: 64,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    controller.musicModel.data?[index].title ??
-                                        "",
-                                    style: const TextStyle(color: Colors.black),
+            val == ''
+                ? Center(
+                    child: Column(
+                    children: [
+                      20.verticalSpace,
+                      LottieBuilder.asset('assets/images/search.json'),
+                      10.verticalSpace,
+                      Text(
+                        'Search your favourite music',
+                        style: Style.textStyleRegular(
+                            textColor: Style.whiteColor, size: 25),
+                      )
+                    ],
+                  ))
+                : GetBuilder<SearchController>(builder: (context) {
+                    return Expanded(
+                      child: AnimationLimiter(
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: controller.musicModel.data?.length ?? 0,
+                            itemBuilder: (context, index) {
+                              return AnimationConfiguration.staggeredList(
+                                position: index,
+                                duration: const Duration(milliseconds: 375),
+                                child: ScaleAnimation(
+                                  child: SlideAnimation(
+                                    child: InkWell(
+                                      onTap: () {
+                                        Get.to(() => AudioPlayerPage(
+                                              selectIndex: index,
+                                            ));
+                                      },
+                                      child: ZoomTabAnimation(
+                                        child: Container(
+                                          padding: const EdgeInsets.all(4),
+                                          margin: const EdgeInsets.all(8),
+                                          child: Row(
+                                            children: [
+                                              Image.network(
+                                                controller
+                                                        .musicModel
+                                                        .data?[index]
+                                                        .album
+                                                        ?.coverMedium ??
+                                                    "",
+                                                width: 64,
+                                              ),
+                                              25.horizontalSpace,
+                                              Expanded(
+                                                child: Text(
+                                                  controller.musicModel
+                                                          .data?[index].title ??
+                                                      "",
+                                                  style: Style.textStyleRegular(
+                                                      textColor:
+                                                          Style.whiteColor),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-              );
-            })
+                              );
+                            }),
+                      ),
+                    );
+                  })
           ],
         ),
       ),

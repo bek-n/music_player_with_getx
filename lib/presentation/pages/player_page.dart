@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:music_player_with_getx/presentation/components/zoom_tab_animation.dart';
+import 'package:music_player_with_getx/presentation/styles/style.dart';
 
 import '../../application/player_controller.dart';
 import '../../application/search_controller.dart';
-
 
 class AudioPlayerPage extends StatefulWidget {
   final int selectIndex;
@@ -36,7 +38,11 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+        backgroundColor: Style.darkBgcolorOfApp,
+        appBar: AppBar(
+          iconTheme: const IconThemeData(color: Style.whiteColor),
+          backgroundColor: Style.darkBgcolorOfApp,
+        ),
         body: Obx(() => Padding(
               padding: const EdgeInsets.only(top: 50),
               child: Column(
@@ -62,14 +68,23 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 15),
                     child: Text(
-                      controllerSearch.musicModel
-                              .data?[controller.selectIndex.value].title ??
-                          "",
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold),
-                    ),
+                        controllerSearch
+                                .musicModel
+                                .data?[controller.selectIndex.value]
+                                .artist
+                                ?.name ??
+                            "",
+                        style: Style.textStyleRegular(
+                            textColor: Style.whiteColor, size: 20)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: Text(
+                        controllerSearch.musicModel
+                                .data?[controller.selectIndex.value].title ??
+                            "",
+                        style: Style.textStyleRegular(
+                            textColor: Style.whiteColor)),
                   ),
                   StreamBuilder(
                       stream: controller.player.positionStream,
@@ -79,6 +94,9 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                             Padding(
                               padding: const EdgeInsets.only(top: 15),
                               child: Slider(
+                                thumbColor: Style.primaryColor,
+                                activeColor: Style.primaryColor,
+                                inactiveColor: Style.greyColor90,
                                 min: 0,
                                 max: controller.player.duration?.inSeconds
                                         .toDouble() ??
@@ -100,10 +118,9 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                               padding: const EdgeInsets.only(right: 25),
                               child: Align(
                                 alignment: Alignment.centerRight,
-                                child: Text(
-                                  s.data.toString().substring(0, 7),
-                                  style: const TextStyle(color: Colors.black),
-                                ),
+                                child: Text(s.data.toString().substring(0, 7),
+                                    style: Style.textStyleRegular(
+                                        textColor: Style.whiteColor)),
                               ),
                             ),
                           ],
@@ -131,21 +148,51 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                                       icon: const Icon(
                                         Icons.skip_previous_rounded,
                                         size: 60,
+                                        color: Style.whiteColor,
                                       )),
-                                  IconButton(
-                                    onPressed: () {
-                                      !controller.isPlaying
-                                          ? controller.play()
-                                          : controller.pause();
-                                    },
-                                    icon: Icon(
-                                      controller.isPlaying
-                                          ? Icons.pause
-                                          : Icons.play_arrow,
-                                      size: 60,
-                                    ),
-                                    iconSize: 32,
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 37),
+                                    child: IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(
+                                          Icons.replay_10_outlined,
+                                          size: 40,
+                                          color: Style.whiteColor,
+                                        )),
                                   ),
+                                  ZoomTabAnimation(
+                                    child: Container(
+                                      height: 80.h,
+                                      width: 80.w,
+                                      decoration: const BoxDecoration(
+                                          color: Style.primaryColor,
+                                          shape: BoxShape.circle),
+                                      child: Center(
+                                        child: IconButton(
+                                          onPressed: () {
+                                            !controller.isPlaying
+                                                ? controller.play()
+                                                : controller.pause();
+                                          },
+                                          icon: Icon(
+                                            controller.isPlaying
+                                                ? Icons.pause
+                                                : Icons.play_arrow,
+                                            size: 60,
+                                            color: Style.blackColor,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  37.horizontalSpace,
+                                  IconButton(
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                        Icons.forward_10_outlined,
+                                        color: Style.whiteColor,
+                                        size: 40,
+                                      )),
                                   IconButton(
                                       onPressed: () {
                                         if (controller.selectIndex.value <
@@ -159,6 +206,7 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                                       icon: const Icon(
                                         Icons.skip_next_rounded,
                                         size: 60,
+                                        color: Style.whiteColor,
                                       ))
                                 ],
                               ),
@@ -169,20 +217,22 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                                     const Icon(
                                       Icons.volume_mute,
                                       size: 28,
+                                      color: Style.whiteColor,
                                     ),
-                                    Slider(
-                                      min: 0,
-                                      max: 1,
-                                      value: controller.player.volume,
-                                      onChanged: (value) {
-                                        controller.player.setVolume(value);
-                                        controller.update();
-                                      },
-                                    ),
-                                    const Icon(
-                                      Icons.volume_up,
-                                      size: 28,
-                                    ),
+                                    // Slider(
+                                    //   min: 0,
+                                    //   max: 1,
+                                    //   value: controller.player.volume,
+                                    //   onChanged: (value) {
+                                    //     controller.player.setVolume(value);
+                                    //     controller.update();
+                                    //   },
+                                    // ),
+                                    // const Icon(
+                                    //   Icons.volume_up,
+                                    //   size: 28,
+                                    //   color: Style.whiteColor,
+                                    // ),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 20),
                                       child: DropdownButton(
