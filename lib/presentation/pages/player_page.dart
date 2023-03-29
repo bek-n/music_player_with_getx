@@ -91,42 +91,53 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                   StreamBuilder(
                       stream: controller.player.positionStream,
                       builder: (context, s) {
-                        return Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(top: 15),
-                              child: Slider(
-                                thumbColor: Style.primaryColor,
-                                activeColor: Style.primaryColor,
-                                inactiveColor: Style.greyColor90,
-                                min: 0,
-                                max: controller.player.duration?.inSeconds
-                                        .toDouble() ??
-                                    1,
-                                value: (s.data?.inSeconds.toDouble() ?? 1),
-                                onChanged: (value) {
-                                  controller.player
-                                      .seek(Duration(seconds: value.toInt()));
-                                },
-                                onChangeStart: (a) {
-                                  controller.pause();
-                                },
-                                onChangeEnd: (b) {
-                                  controller.play();
-                                },
+                        if (controller.selectIndex.value <
+                                (controllerSearch.musicModel.data?.length ??
+                                    0) &&
+                            s.data == controller.player.duration &&
+                            s.hasData) {
+                          WidgetsBinding.instance
+                              .addPostFrameCallback((timeStamp) {
+                            controller.selectIndex.value++;
+                          });
+                            }
+                          return Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 15),
+                                child: Slider(
+                                  thumbColor: Style.primaryColor,
+                                  activeColor: Style.primaryColor,
+                                  inactiveColor: Style.greyColor90,
+                                  min: 0,
+                                  max: controller.player.duration?.inSeconds
+                                          .toDouble() ??
+                                      1,
+                                  value: (s.data?.inSeconds.toDouble() ?? 1),
+                                  onChanged: (value) {
+                                    controller.player
+                                        .seek(Duration(seconds: value.toInt()));
+                                  },
+                                  onChangeStart: (a) {
+                                    controller.pause();
+                                  },
+                                  onChangeEnd: (b) {
+                                    controller.play();
+                                  },
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 25),
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Text(s.data.toString().substring(0, 7),
-                                    style: Style.textStyleRegular(
-                                        textColor: Style.whiteColor)),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 25),
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(s.data.toString().substring(0, 7),
+                                      style: Style.textStyleRegular(
+                                          textColor: Style.whiteColor)),
+                                ),
                               ),
-                            ),
-                          ],
-                        );
+                            ],
+                          );
+                        
                       }),
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
@@ -152,16 +163,6 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                                         size: 60,
                                         color: Style.whiteColor,
                                       )),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 37),
-                                    child: IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(
-                                          Icons.replay_10_outlined,
-                                          size: 40,
-                                          color: Style.whiteColor,
-                                        )),
-                                  ),
                                   ZoomTabAnimation(
                                     child: Container(
                                       height: 80.h,
@@ -187,14 +188,6 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                                       ),
                                     ),
                                   ),
-                                  37.horizontalSpace,
-                                  IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(
-                                        Icons.forward_10_outlined,
-                                        color: Style.whiteColor,
-                                        size: 40,
-                                      )),
                                   IconButton(
                                       onPressed: () {
                                         if (controller.selectIndex.value <
