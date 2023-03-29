@@ -100,44 +100,43 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                               .addPostFrameCallback((timeStamp) {
                             controller.selectIndex.value++;
                           });
-                            }
-                          return Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 15),
-                                child: Slider(
-                                  thumbColor: Style.primaryColor,
-                                  activeColor: Style.primaryColor,
-                                  inactiveColor: Style.greyColor90,
-                                  min: 0,
-                                  max: controller.player.duration?.inSeconds
-                                          .toDouble() ??
-                                      1,
-                                  value: (s.data?.inSeconds.toDouble() ?? 1),
-                                  onChanged: (value) {
-                                    controller.player
-                                        .seek(Duration(seconds: value.toInt()));
-                                  },
-                                  onChangeStart: (a) {
-                                    controller.pause();
-                                  },
-                                  onChangeEnd: (b) {
-                                    controller.play();
-                                  },
-                                ),
+                        }
+                        return Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 15),
+                              child: Slider(
+                                thumbColor: Style.primaryColor,
+                                activeColor: Style.primaryColor,
+                                inactiveColor: Style.greyColor90,
+                                min: 0,
+                                max: controller.player.duration?.inSeconds
+                                        .toDouble() ??
+                                    1,
+                                value: (s.data?.inSeconds.toDouble() ?? 1),
+                                onChanged: (value) {
+                                  controller.player
+                                      .seek(Duration(seconds: value.toInt()));
+                                },
+                                onChangeStart: (a) {
+                                  controller.pause();
+                                },
+                                onChangeEnd: (b) {
+                                  controller.play();
+                                },
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 25),
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(s.data.toString().substring(0, 7),
-                                      style: Style.textStyleRegular(
-                                          textColor: Style.whiteColor)),
-                                ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 25),
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(s.data.toString().substring(0, 7),
+                                    style: Style.textStyleRegular(
+                                        textColor: Style.whiteColor)),
                               ),
-                            ],
-                          );
-                        
+                            ),
+                          ],
+                        );
                       }),
                   Padding(
                     padding: const EdgeInsets.only(top: 10),

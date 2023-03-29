@@ -9,7 +9,7 @@ class PlayerController extends GetxController {
   bool isVolume = true;
   Duration? duration;
   RxInt selectIndex = 0.obs;
-  
+  bool loading = false;
 
   getMusics({required MusicModel model, required int index}) async {
     selectIndex.value = index;
@@ -21,9 +21,10 @@ class PlayerController extends GetxController {
       ],
     );
 
-    await player.setAudioSource(playlist,initialIndex: index);
+    await player.setAudioSource(playlist, initialIndex: index);
     update();
   }
+
   pause() {
     player.pause();
     isPlaying = false;
@@ -45,8 +46,8 @@ class PlayerController extends GetxController {
   setSpeed(double speed) {
     player.setSpeed(speed);
   }
-removeMusic(){
+
+  removeMusic() {
     player.dispose();
   }
-  
 }
