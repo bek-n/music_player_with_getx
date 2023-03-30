@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:music_player_with_getx/presentation/components/custom_textfromfiled.dart';
 import 'package:music_player_with_getx/presentation/components/zoom_tab_animation.dart';
@@ -18,10 +19,22 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final TextEditingController textController = TextEditingController();
+  late TextEditingController textController;
   final controller = Get.put(SearchController());
   final _delayed = Delayed(milliseconds: 700);
   String val = '';
+
+  @override
+  void initState() {
+    textController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +53,7 @@ class _SearchPageState extends State<SearchPage> {
         child: Column(
           children: [
             CustomTextFrom(
+              controller: textController,
               style: Style.textStyleRegular(textColor: Style.whiteColor),
               hintext: '',
               label: "",
@@ -73,57 +87,68 @@ class _SearchPageState extends State<SearchPage> {
                 : GetBuilder<SearchController>(builder: (context) {
                     return Expanded(
                       child: AnimationLimiter(
-                        child: ListView.builder(
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            itemCount: controller.musicModel.data?.length ?? 0,
-                            itemBuilder: (context, index) {
-                              return AnimationConfiguration.staggeredList(
-                                position: index,
-                                duration: const Duration(milliseconds: 375),
-                                child: ScaleAnimation(
-                                  child: SlideAnimation(
-                                    child: InkWell(
-                                      onTap: () {
-                                        Get.to(() => AudioPlayerPage(
-                                              selectIndex: index,
-                                            ));
-                                      },
-                                      child: ZoomTabAnimation(
-                                        child: Container(
-                                          padding: const EdgeInsets.all(4),
-                                          margin: const EdgeInsets.all(8),
-                                          child: Row(
-                                            children: [
-                                              Image.network(
-                                                controller
-                                                        .musicModel
-                                                        .data?[index]
-                                                        .album
-                                                        ?.coverMedium ??
-                                                    "",
-                                                width: 64,
+                        child: controller.searchLoading
+                            ? Center(
+                                child: LoadingAnimationWidget.hexagonDots(
+                                    color: Style.primaryColor, size: 60),
+                              )
+                            : ListView.builder(
+                                shrinkWrap: true,
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
+                                itemCount:
+                                    controller.musicModel.data?.length ?? 0,
+                                itemBuilder: (context, index) {
+                                  return AnimationConfiguration.staggeredList(
+                                    position: index,
+                                    duration: const Duration(milliseconds: 375),
+                                    child: ScaleAnimation(
+                                      child: SlideAnimation(
+                                        child: InkWell(
+                                          onTap: () {
+                                            textController.clear();
+                                            Get.to(() => AudioPlayerPage(
+                                                  selectIndex: index,
+                                                ));
+                                          },
+                                          child: ZoomTabAnimation(
+                                            child: Container(
+                                              padding: const EdgeInsets.all(4),
+                                              margin: const EdgeInsets.all(8),
+                                              child: Row(
+                                                children: [
+                                                  Image.network(
+                                                    controller
+                                                            .musicModel
+                                                            .data?[index]
+                                                            .album
+                                                            ?.coverMedium ??
+                                                        "",
+                                                    width: 64,
+                                                  ),
+                                                  25.horizontalSpace,
+                                                  Expanded(
+                                                    child: Text(
+                                                      controller
+                                                              .musicModel
+                                                              .data?[index]
+                                                              .title ??
+                                                          "",
+                                                      style: Style
+                                                          .textStyleRegular(
+                                                              textColor: Style
+                                                                  .whiteColor),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                              25.horizontalSpace,
-                                              Expanded(
-                                                child: Text(
-                                                  controller.musicModel
-                                                          .data?[index].title ??
-                                                      "",
-                                                  style: Style.textStyleRegular(
-                                                      textColor:
-                                                          Style.whiteColor),
-                                                ),
-                                              ),
-                                            ],
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              );
-                            }),
+                                  );
+                                }),
                       ),
                     );
                   })

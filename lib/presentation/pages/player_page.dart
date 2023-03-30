@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:music_player_with_getx/presentation/components/zoom_tab_animation.dart';
 import 'package:music_player_with_getx/presentation/styles/style.dart';
 
@@ -169,22 +170,29 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                                       decoration: const BoxDecoration(
                                           color: Style.primaryColor,
                                           shape: BoxShape.circle),
-                                      child: Center(
-                                        child: IconButton(
-                                          onPressed: () {
-                                            !controller.isPlaying
-                                                ? controller.play()
-                                                : controller.pause();
-                                          },
-                                          icon: Icon(
-                                            controller.isPlaying
-                                                ? Icons.pause
-                                                : Icons.play_arrow,
-                                            size: 60,
-                                            color: Style.blackColor,
-                                          ),
-                                        ),
-                                      ),
+                                      child: controller.loading
+                                          ? Center(
+                                              child: LoadingAnimationWidget
+                                                  .hexagonDots(
+                                                      color: Style.blackColor,
+                                                      size: 45),
+                                            )
+                                          : Center(
+                                              child: IconButton(
+                                                onPressed: () {
+                                                  !controller.isPlaying
+                                                      ? controller.play()
+                                                      : controller.pause();
+                                                },
+                                                icon: Icon(
+                                                  controller.isPlaying
+                                                      ? Icons.pause
+                                                      : Icons.play_arrow,
+                                                  size: 60,
+                                                  color: Style.blackColor,
+                                                ),
+                                              ),
+                                            ),
                                     ),
                                   ),
                                   IconButton(

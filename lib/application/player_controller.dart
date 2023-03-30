@@ -12,6 +12,8 @@ class PlayerController extends GetxController {
   bool loading = false;
 
   getMusics({required MusicModel model, required int index}) async {
+    loading = true;
+    update();
     selectIndex.value = index;
     final playlist = ConcatenatingAudioSource(
       shuffleOrder: DefaultShuffleOrder(),
@@ -22,6 +24,7 @@ class PlayerController extends GetxController {
     );
 
     await player.setAudioSource(playlist, initialIndex: index);
+    loading = false;
     update();
   }
 

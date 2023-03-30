@@ -3,12 +3,14 @@ import 'package:get/get.dart';
 
 import '../domain/model/music_model.dart';
 
-
 class SearchController extends GetxController {
   MusicModel musicModel = MusicModel();
+  bool searchLoading = false;
 
   getMusic(String name) async {
     try {
+      searchLoading = true;
+      update();
       final res = await Dio().get(
         "https://deezerdevs-deezer.p.rapidapi.com/search?q=$name",
         options: Options(
@@ -25,6 +27,7 @@ class SearchController extends GetxController {
         }
       } else {
         musicModel = MusicModel.fromJson(res.data);
+         searchLoading = false;
         update();
       }
     } catch (e) {
